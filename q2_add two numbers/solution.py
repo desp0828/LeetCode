@@ -9,16 +9,32 @@ Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 0 -> 8
 Explanation: 342 + 465 = 807.
 '''
- def addTwoNumbers(self, l1, l2):
-        carry = 0;
-        res = n = ListNode(0);
-        while l1 or l2 or carry:
-            if l1:
-                carry += l1.val
-                l1 = l1.next;
-            if l2:
-                carry += l2.val;
-                l2 = l2.next;
-            carry, val = divmod(carry, 10)
-            n.next = n = ListNode(val);
-        return res.next;
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1, l2):
+        addends = l1, l2
+        dummy = end = ListNode(0)
+        carry = 0
+        while addends or carry:
+            carry += sum(a.val for a in addends)
+            addends = [a.next for a in addends if a.next]
+            end.next = end = ListNode(carry % 10)
+            carry //= 10
+        return dummy.next
+       
+       
+class Solution:
+    def addTwoNumbers(self, l1, l2):
+        def toint(node):
+            return node.val + 10 * toint(node.next) if node else 0
+        n = toint(l1) + toint(l2)
+        first = last = ListNode(n % 10)
+        while n > 9:
+            n //= 10
+            last.next = last = ListNode(n % 10)
+        return first
